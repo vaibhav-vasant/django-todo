@@ -47,5 +47,8 @@ class RegisterView(generic.CreateView):
         valid = super(RegisterView, self).form_valid(form)
         username = form.cleaned_data.get('username')
         raw_password = form.cleaned_data.get('password1')
-        form.save()
+        if len(raw_password) < 6:
+            form.add_error('password1', 'Password should be at least 6 characters long.')
+        else:
+            form.save()
         return valid
