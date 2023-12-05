@@ -51,6 +51,7 @@
               title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
           </form>
           {{ todo.title }}
+          <span>{{ todo.body }}</span>
           <a href="{% url 'todos:delete' todo.id %}" title="Delete">
             <i class="far fa-trash-alt"></i>
           </a>
