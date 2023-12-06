@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-
 class IndexView(generic.ListView):
     template_name = 'todos/index.html'
     context_object_name = 'todo_list'
@@ -18,7 +17,7 @@ class IndexView(generic.ListView):
 def add(request):
     title = request.POST['title']
     deadline_str = request.POST.get('deadline', '')
-    deadline = timezone.make_aware(timezone.datetime.strptime(deadline_str, '%Y-%m-%d'))
+    deadline = timezone.make_aware(timezone.datetime.strptime(deadline_str, '%m %d %Y'))
 
     if deadline < timezone.now():
         raise ValidationError('Deadline cannot be in the past.')
@@ -39,7 +38,7 @@ def update(request, todo_id):
     todo = get_object_or_404(Todo, pk=todo_id)
     isCompleted = request.POST.get('isCompleted', False)
     deadline_str = request.POST.get('deadline', '')
-    deadline = timezone.make_aware(timezone.datetime.strptime(deadline_str, '%Y-%m-%d'))
+    deadline = timezone.make_aware(timezone.datetime.strptime(deadline_str, '%m %d %Y'))
 
     if isCompleted == 'on':
         isCompleted = True
