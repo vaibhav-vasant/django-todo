@@ -24,10 +24,13 @@
       <form method="post" action="{% url 'todos:add' %}">
         {% csrf_token %}
         <div class="form-row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <input type="text" class="form-control" name="title" placeholder="Do laundry" required>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <input type="datetime-local" class="form-control" name="deadline" required>
+          </div>
+          <div class="col-md-4">
             <button type="submit" name="submit" class="btn btn-outline-primary">
               Add
             </button>
@@ -51,6 +54,13 @@
               title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
           </form>
           {{ todo.title }}
+          <span class="deadline">
+            {% if todo.deadline %}
+              <span class="{% if todo.deadline|timesince:'d' >= 0 %}text-danger{% elif todo.deadline|timesince:'d' < -1 %}text-warning{% endif %}">
+                {{ todo.deadline|date:"M d, Y H:i" }}
+              </span>
+            {% endif %}
+          </span>
           <a href="{% url 'todos:delete' todo.id %}" title="Delete">
             <i class="far fa-trash-alt"></i>
           </a>
