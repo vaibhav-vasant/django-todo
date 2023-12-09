@@ -27,7 +27,10 @@
           <div class="col-md-6">
             <input type="text" class="form-control" name="title" placeholder="Do laundry" required>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-3">
+            <input type="date" class="form-control" name="deadline" required>
+          </div>
+          <div class="col-md-3">
             <button type="submit" name="submit" class="btn btn-outline-primary">
               Add
             </button>
@@ -50,7 +53,7 @@
               {% endif %} class="todo-status-checkbox"
               title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
           </form>
-          {{ todo.title }}
+          {{ todo.title }} - Deadline: {{ todo.deadline }}
           <a href="{% url 'todos:delete' todo.id %}" title="Delete">
             <i class="far fa-trash-alt"></i>
           </a>
