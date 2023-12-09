@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from .models import Todo
 from django.http import HttpResponseRedirect
+from django.utils import timezone
+
 
 class IndexView(generic.ListView):
     template_name = 'todos/index.html'
@@ -11,9 +13,12 @@ class IndexView(generic.ListView):
         """Return all the latest todos."""
         return Todo.objects.order_by('-created_at')
 
+
 def add(request):
     title = request.POST['title']
-    Todo.objects.create(title=title)
+    deadline_str = request.POST.get('deadline', '')
+    deadline = timezone.datetime.strptime(deadline_str, '%Y-%m-%d') if deadline_str else None
+    Todo.objects.create(title=title, deadline=deadline)
 
     return redirect('todos:index')
 
@@ -30,6 +35,9 @@ def update(request, todo_id):
         isCompleted = True
     
     todo.isCompleted = isCompleted
+    deadline_str = request.POST.get('deadline', '')
+    if deadline_str:
+        todo.deadline = timezone.datetime.strptime(deadline_str, '%Y-%m-%d')
 
     todo.save()
     return redirect('todos:index')
